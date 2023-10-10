@@ -1,0 +1,28 @@
+{
+  "kind": "collectionType",
+  "collectionName": "reviews",
+  "info": {
+    "singularName": "review",
+    "pluralName": "reviews",
+    "displayName": "Review",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "review": {
+      "type": "text"
+    },
+    "reviewer": {
+      "type": "string"
+    },
+    "the_weekend": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::the-weekend.the-weekend",
+      "inversedBy": "reviews"
+    }
+  }
+}

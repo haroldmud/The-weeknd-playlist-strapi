@@ -16,12 +16,17 @@
   }
 }
 
-body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+.header {
+  background-color: rgba(240, 248, 255, 0.095);
+}
+
+.register {
+  background-color: rgba(240, 248, 255, 0.46);
+}
+
+.text-gradient {
+  background-image: linear-gradient(to right, #ff00cc, #3333cc);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }

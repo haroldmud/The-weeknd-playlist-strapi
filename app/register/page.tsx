@@ -1,9 +1,13 @@
-import Header from "@/components/header";
+"use client"
+import Layout from "@/components/layout";
+import { useSelector } from "react-redux";
 
 export default function Register() {
+  const login = useSelector<any>(state => state.logged.value);
+  console.log(login)
   return (
     <>
-      <Header />
+      <Layout >
       <section>
         <div className="header">
           <h3 className="mx-auto w-fit font-thin text-xs py-1">
@@ -49,6 +53,7 @@ export default function Register() {
           </form>
         </div>
       </section>
+      </Layout>
     </>
   );
 }

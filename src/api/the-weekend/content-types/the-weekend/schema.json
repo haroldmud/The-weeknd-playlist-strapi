@@ -29,6 +29,9 @@
       "relation": "oneToMany",
       "target": "api::review.review",
       "mappedBy": "the_weekend"
+    },
+    "image": {
+      "type": "string"
     }
   }
 }

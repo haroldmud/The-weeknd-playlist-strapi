@@ -3,7 +3,9 @@ import Layout from "@/components/layout";
 import { useState, useEffect } from "react";
 import { fetcher } from "../../library/api";
 import Link from "next/link";
+import { url } from "../../library/api";
 import Loading from "@/components/loading";
+require('dotenv')
 
 export default function Playlist() {
   const [songs, setSongs] = useState<{
@@ -11,7 +13,7 @@ export default function Playlist() {
   } | null>(null);
   const [load, setLoad] = useState<boolean>(true);
   useEffect(() => {
-    fetcher(`http://localhost:1337/api/the-weekends`)
+    fetcher(`${url}/the-weekends`)
       .then((data) => {setSongs(data); setLoad(false)})
       .catch((err) => {
         console.error(err);
@@ -24,6 +26,7 @@ export default function Playlist() {
       <Loading />
     )
   }
+
 
   return (
     <>
@@ -39,7 +42,7 @@ export default function Playlist() {
                 <div className="flex gap-6">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
-                    className="w-20 h-20"
+                    className="w-20 h-20 rounded-l-lg"
                     src={song.attributes.image}
                     alt="song image"
                   />
@@ -47,7 +50,8 @@ export default function Playlist() {
                     <h2 className="font-bold">{song.attributes.single}</h2>
                     <Link
                       href={`/playlists/${song.id}`}
-                      className="px-6 ml-12 text-xs hover:text-smß py-1 bg-gradient-to-r from-blue-400 via-purple-500 to-blue-300 shadow-sm rounded-md hover:bg-blue-900 text-blue-100 w-20"
+                      className="px-6 ml-12 text-xs hover:text-smß py-1 bg-gradient-to-r hover:bg-gradient-to-l transition duration-500 ease-in-out from-blue-400 via-purple-500 to-blue-300 shadow-sm
+                       rounded-md hover:border- text-blue-100 w-20  font-bold"
                     >
                       Read
                     </Link>

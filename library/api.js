@@ -1,3 +1,5 @@
+export const url = process.env.NEXT_PUBLIC_STRAPI_URL;
+
 export async function fetcher(url, options=  {}) {
   let response;
   if(!options) {

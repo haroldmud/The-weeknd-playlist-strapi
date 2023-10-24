@@ -3,7 +3,7 @@ import Footer from "./footer"
 
 export default function Layout(props: any) {
   return(
-    <section className="h-[100vh] flex flex-col justify-between">
+    <section className="h-[100vh] flex flex-col justify-between relative">
       <div>
         <Header />
         {props.children}

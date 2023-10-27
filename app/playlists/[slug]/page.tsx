@@ -28,7 +28,7 @@ export default function Song({ params }: paramDto) {
   useEffect(() => {
     fetcher(`${url}/the-weekends/${slug}`, {
       method: "Get",
-      Headers: {
+      headers: {
         'Authorization': `Bearer ${token}`
       }
     })
@@ -112,7 +112,7 @@ export default function Song({ params }: paramDto) {
               </li>
             ))
           }
-          <Comments songID={slugs?.data.id}/>
+          <Comments songID={slugs?.data?.id}/>
         </ul>
       </div>
     </Layout>

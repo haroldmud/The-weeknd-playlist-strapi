@@ -1,18 +1,12 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { fetcher } from "@/library/api";
 import { VscKebabVertical } from "react-icons/vsc";
 import { CiFlag1 } from "react-icons/ci";
 import { PiTrashThin } from "react-icons/pi";
 import { url } from "@/library/api";
+import Delete from "./delete";
 
 export default function Comments(props: any) {
-  const [comments, setComments] = useState<any>([]);
-  const [admin, setAdmin] = useState<any>("");
-  const [userComment, setUserComment] = useState<any>("");
-  function handleComment(event: any) {
-    setUserComment(event.target.value);
-  }
-  const token = localStorage.getItem("token");
   const colors = [
     "bg-gray-800",
     "bg-rose-800",
@@ -21,6 +15,13 @@ export default function Comments(props: any) {
     "bg-indigo-800",
     "bg-teal-800"
   ];
+  const [comments, setComments] = useState<any>([]);
+  const [admin, setAdmin] = useState<any>("");
+  const [userComment, setUserComment] = useState<any>("");
+  function handleComment(event: any) {
+    setUserComment(event.target.value);
+  }
+  const token = localStorage.getItem("token");
 
   useEffect(() => {
     try {
@@ -79,13 +80,55 @@ export default function Comments(props: any) {
     await setUserComment('');
   }
 
-  const [openItems, setOpenItems] = useState<boolean[]>(Array(comments.length).fill(false));
+  const [openItems, setOpenItems] = useState<boolean[]>(Array(comments?.length).fill(false));
 
-function handleDetail(idx: number) {
-  const newOpenItems = [...openItems];
-  newOpenItems[idx] = !newOpenItems[idx];
-  setOpenItems(newOpenItems);
-}
+  function handleDetail(idx: number) {
+    const newOpenItems = [...openItems];
+    newOpenItems[idx] = !newOpenItems[idx];
+    setOpenItems(newOpenItems);
+  }
+
+  const [deleteId, setDeleteId] = useState<null | number>(null);
+  const [popUp, setPopup] = useState<boolean>(false);
+  const popupRef: any = useRef(null);
+  function deleting(id: number){
+    setDeleteId(id);
+  }
+  function canceling(){
+    setDeleteId(null);
+    setPopup(false)
+  }
+  const closePopup = () => {
+    setPopup(false);
+  };
+  useEffect(() => {
+    if (popUp) {
+      const handleOutsideClick = (e: any) => {
+        if (popupRef.current && !popupRef.current.contains(e.target)) {
+          console.log("Clicked outside of pop-up");
+          closePopup();
+        }
+      };
+  
+      document.addEventListener('mousedown', handleOutsideClick);
+  
+      return () => {
+        document.removeEventListener('mousedown', handleOutsideClick);
+      };
+    }
+  }, [popUp]);
+  const handleDeletion = async() => { 
+    await fetcher(`${url}/comments/${deleteId}`, {
+      method: "Delete",
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
+      .then((data) => setComments(comments.filter(
+        (item: any) => item.id !== data.id
+      )))
+      .catch((err) => console.error(err));
+  };
 
   return (
     <div>
@@ -147,14 +190,24 @@ function handleDetail(idx: number) {
             {
               openItems[key]
               &&
-              <div className="absolute -right-20 grid gap-1">
-                <button className="register rounded-sm font-thin hover:bg-gray-300 text-[0.5rem] p-2 flex justify-between gap-2 my-auto">Supprimer <span className="my-auto text-xs"><PiTrashThin/></span></button>
+              <div ref={popupRef} className="absolute -right-20 grid gap-1">
+                {admin === item.attributes.username &&
+                  <button onClick={()=> { deleting(item.id); setPopup(true)}} className="register rounded-sm font-thin hover:bg-gray-300 text-[0.5rem] p-2 flex justify-between gap-2 my-auto">Supprimer <span className="my-auto text-xs"><PiTrashThin/></span></button>
+                }
                 <button className="register rounded-sm font-thin hover:bg-gray-300 text-[0.5rem] p-2 flex justify-between gap-2 my-auto">signaler <span className="my-auto text-xs"><CiFlag1 /></span></button>
               </div>
             }
           </div>
         ))}
       </div>
+      {
+        popUp &&
+        <Delete 
+        cancel={()=>canceling()} 
+        delete={()=>{handleDeletion();canceling()}}
+        />
+      }
+      
     </div>
   );
 }

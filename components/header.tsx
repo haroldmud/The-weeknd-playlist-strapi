@@ -55,14 +55,17 @@ export default function Header() {
     }, 3000);
   },[show])
   //Redux login and logout state management for other pages accessibility
-  const loggedLS = localStorage.getItem("isLogged");
-  const token = localStorage.getItem('token')
+  // const loggedLS = localStorage.getItem("isLogged");
+  const [token, setToken] = useState<string | null>(null)
+  useEffect(() => {
+    // Retrieve the token from localStorage when the component mounts
+    const storedToken = localStorage.getItem('token');
+    if (storedToken) {
+      setToken(storedToken);
+    }
+  }, []);
   console.log(token)
   function handleLogout() {
-    if(typeof loggedLS === null){
-      console.log('loggedLS')
-    }
-    console.log('first')
     unsetToken();
     if(token){
       setShow(null);

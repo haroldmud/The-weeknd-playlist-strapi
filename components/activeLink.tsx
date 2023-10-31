@@ -1,19 +1,20 @@
-import { withRouter } from "next/router";
-import { Link } from "react-router-dom";
+import { useRouter } from "next/router";
+import Link from "next/link";
 
 export function ActiveLink({router, href, className, children}: any) {
-  (function (){
-    if(typeof window !== 'undefined') {
-      router.prefetch(router.pathname)
-    }
-  })()
+  const routing = useRouter();
+  // (function (){
+  //   if(typeof window !== 'undefined') {
+  //     router.prefetch(router.pathname)
+  //   }
+  // })()
 
-  function handleClick(event: Event) {
+  function handleClick(event: any) {
     event.preventDefault();
     router.push(href)
   }
 
-  const isCurrentPath = router?.pathname === href || router?.aspath === href;
+  const isCurrentPath = routing?.pathname === href;
 
   return(
     <Link href={href} className={`${isCurrentPath && 'underline'} ${className}`} onClick={handleClick}>
@@ -21,6 +22,3 @@ export function ActiveLink({router, href, className, children}: any) {
     </Link>
   )
 }
-
-
-export default withRouter(ActiveLink);
